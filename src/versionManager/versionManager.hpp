@@ -2,6 +2,9 @@
 #include <vector>
 #include <set>
 #include <math.h>
+#include <algorithm>
+#include <map>
+#include "fileSystemVM.hpp"
 
 using namespace std;
 
@@ -19,6 +22,7 @@ struct operation{
 	int parent_version;
 	operationType opType;
 	operationObj opObj;
+	string path;
 	string content;
 };
 
@@ -31,11 +35,17 @@ struct versionManager{
 	vector<int> depth;
 	// for file managment
 	set<string> created;
+	map<string,string> content;
 };
 
+// to get the history vm.history
+// to get the content of a file vm.content[path]
+// the last created version vm.versions
 versionManager createVM();
 int createInVM( operationObj obj, string path, versionManager &vm );
 int deleteInVM( operationObj obj, string path, versionManager &vm );
-int editInVM( operationObj obj, string path, string content, versionManager &vm );
-int changeVersion( versionManager &vm, int newVersion );
+int editInVM( string path, string content, versionManager &vm );
+fileSystemVM changeVersion( versionManager &vm, int newVersion );
 int lcaVersions( versionManager vm, int v1, int v2 );
+fileSystemVM getFilesVM( versionManager vm, int version  );
+int mergeVersions( versionManager &vm, int v1, int v2 );
