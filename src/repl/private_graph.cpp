@@ -1,6 +1,11 @@
 #include "graph.hpp"
 
 
+string Error::toString(){
+  string errString = "[ERROR] " + this->description;
+  return colorRED(errString);
+}
+
 FileSystem generateRoot(){
   FileSystem fs;
   return fs; 
@@ -20,10 +25,9 @@ string FileSystem::typeOf(variant<FileSystem*,File> t){
 variant<Error,monostate> FileSystem::_crear_dir(string nombre){
   if (objectExists(nombre)) return Error("El " + typeOf(succs[nombre]) + ": '" + nombre + "' ya existe");
   if (nombre=="..") return Error("Nombre: '..' reservado para directorios padres");
-
-  FileSystem* s = new FileSystem{nullopt,this};
+  FileSystem* s = new FileSystem{nullopt,this,nombre};
   succs[nombre] = s;
-  return {};
+  return monostate{};
 }
 
 
@@ -31,7 +35,7 @@ variant<Error,monostate> FileSystem::_crear_archivo(string nombre){
   if (objectExists(nombre)) return Error("El " + typeOf(succs[nombre]) + ": '" + nombre + "' ya existe");
   if (nombre=="..") return Error("Nombre: '..' reservado para directorios padres");
   succs[nombre] = "";
-  return {};
+  return monostate{};
 }
 
 variant<Error,monostate> FileSystem::_eliminar(string nombre){
@@ -39,7 +43,7 @@ variant<Error,monostate> FileSystem::_eliminar(string nombre){
   if (nombre=="..") return Error("NO se puede eliminar '..'");
 
   succs.erase(nombre);
-  return {};
+  return monostate{};
 }
 
 variant<Error,string> FileSystem::_leer(string nombre){
@@ -55,7 +59,7 @@ variant<Error,monostate> FileSystem::_escribir(string nombre, string contenido){
 
   
   succs[nombre] = contenido;
-  return {};
+  return monostate{};
 }
 
 variant<Error,FileSystem*> FileSystem::_ir(string nombre){
@@ -75,10 +79,20 @@ string tabulate(int tabs, string s){
   return acc;
 }
 
-string FileSystem::toString(int tabs, bool withContent, bool showDotDot){
+string concatPaths(vector<string> paths){
   string acc;
 
-  if (!objectExists("..")) acc += "Directorio: /\n";
+  for(auto path : paths)
+    acc +=  path + "/"; 
+  
+  return acc;
+
+}
+
+string FileSystem::toString(bool withContent, bool showDotDot, int tabs){
+  string acc;
+
+  if (tabs == 1) acc += "Directorio 'Raiz' absoluto: " + concatPaths(path) + "\n";
 
   for(auto [name,value] : succs)
   {
@@ -92,7 +106,7 @@ string FileSystem::toString(int tabs, bool withContent, bool showDotDot){
       } else
       {
         acc += tabulate(tabs,"Directorio: " + name + "\n");
-        acc += get<FileSystem*>(value)->toString(tabs+1,withContent);
+        acc += get<FileSystem*>(value)->toString(withContent,showDotDot,tabs+1);
       }
       
       

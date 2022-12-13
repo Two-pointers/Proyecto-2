@@ -29,6 +29,7 @@ int main(){
 		"cannot_read_inexistent",
 		"cannot_ir_inexistent",
 		"cannot_ir_solo_root",
+		"help",
 	};
 
 	for (auto tfile : testFiles){

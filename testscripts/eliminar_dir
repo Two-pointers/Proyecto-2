@@ -1,5 +1,6 @@
 crear_dir(dir1)
 // deberia imprimir raiz + dir1
+print()
 eliminar(dir1)
 // deberia imprimir solo la raiz
 print()

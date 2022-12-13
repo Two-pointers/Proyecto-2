@@ -34,8 +34,10 @@ struct REPL
     match.erase(match.begin());
     variant<Error, std::monostate> merror = current->crear_dir(match);
     
-    if (holds_alternative<Error>(merror))
-      cout << get<Error>(merror).description << endl;
+    if (holds_alternative<Error>(merror)){
+      cout << get<Error>(merror).toString() << endl;
+    }
+      
     
     return true;
 
@@ -52,7 +54,7 @@ struct REPL
     variant<Error, std::monostate> merror = current->crear_archivo(match);
 
     if (holds_alternative<Error>(merror))
-      cout << get<Error>(merror).description << endl;
+      cout << get<Error>(merror).toString() << endl;
 
     return true;
   }
@@ -68,7 +70,7 @@ struct REPL
     variant<Error, std::monostate> merror = current->eliminar(match);
 
     if (holds_alternative<Error>(merror))
-      cout << get<Error>(merror).description << endl;
+      cout << get<Error>(merror).toString() << endl;
 
     return true;
   }
@@ -84,7 +86,7 @@ struct REPL
     variant<Error, std::string> merror = current->leer(match);
 
     if (holds_alternative<Error>(merror)){
-      cout << get<Error>(merror).description << endl;
+      cout << get<Error>(merror).toString() << endl;
     } else {
       cout << get<string>(merror) << endl;
     }
@@ -107,7 +109,7 @@ struct REPL
     variant<Error, monostate> merror = current->escribir(f1,f2);
 
     if (holds_alternative<Error>(merror))
-      cout << get<Error>(merror).description << endl;
+      cout << get<Error>(merror).toString() << endl;
     
     return true;
   }
@@ -123,7 +125,7 @@ struct REPL
     variant<Error, FileSystem*> merror = current->ir(match);
 
     if (holds_alternative<Error>(merror)){
-      cout << get<Error>(merror).description << endl;
+      cout << get<Error>(merror).toString() << endl;
     } else{
       current = get<FileSystem*>(merror);
     }
@@ -137,7 +139,7 @@ struct REPL
     variant<Error, FileSystem*> merror = current->ir();
 
     if (holds_alternative<Error>(merror)){
-      cout << get<Error>(merror).description << endl;
+      cout << get<Error>(merror).toString() << endl;
     } else{
       current = get<FileSystem*>(merror);
     }
@@ -159,13 +161,49 @@ struct REPL
 
   }
 
-  void runREPL(istream& c){
+  bool salir(string line){
+    regex salir{"\\s*salir\\s*$"};
+    if (!regex_match(line,salir)) return false;
 
+    cout << "GRACIAS POR VERSIONAR CON NOSOTROS." << endl;
+
+    return true;
+
+  }
+
+  bool ayuda(string line){
+    regex ayuda{"\\s*ayuda\\s*"};
+    if (!regex_match(line,ayuda)) return false;
+
+    cout << "AYUDA:" << endl;
+    cout << "-----" <<  endl;
+    cout << "crear_dir(arg)         - Crea un directiorio en la locacion actual" << endl;
+    cout << "crear_archivo(arg)     - Crea un archivo en la locacion actual" << endl;
+    cout << "eliminar(arg)          - eliminar el objeto hijo" << endl;
+    cout << "leer(arg)              - imprime el contenido del archivo hijo" << endl;
+    cout << "escribir(file,content) - llena el archivo hijo" << endl;
+    cout << "ir(file)               - ir al directorio hijo" << endl;
+    cout << "ir()                   - ir al directorio padre" << endl;
+
+    return true;
+
+  }
+
+  void runREPL(istream& c, bool showBanner=false){
+
+    if (showBanner){
+      cout << "==========================" << endl;
+      cout << "| GLORIOUS CELV REPL     |" << endl;
+      cout << "==========================" << endl;
+    }
+    
     
     bool b = false;
     while(true){
       string line;
+      cout << "> ";
       std::getline(c, line);
+      b = false;
       b = crear_dir(line);
       if (!b) b = crear_archivo(line);
       if (!b) b = eliminar(line);
@@ -174,6 +212,7 @@ struct REPL
       if (!b) b = ir1(line);
       if (!b) b = ir0(line);
       if (!b) b = print(line);
+      if (!b) b = ayuda(line);
       if (!b) b = comment(line);
       if (line == "salir") return;
       if (!b) (cout << "Bad function: " << line << endl);

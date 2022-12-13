@@ -7,6 +7,7 @@
 #include <optional>
 #include <variant>
 #include "../versionManager/versionManager.hpp"
+#include "../utils/coloring/coloring.hpp"
 
 using namespace std;
 
@@ -22,6 +23,8 @@ struct Error{
   Error (string description)
     : description (description)
     {};
+  
+  string toString();
 };
 
 class FileSystem
@@ -45,6 +48,9 @@ class FileSystem
     };
   
   public:
+
+    vector<string> path;
+
     optional<versionManager> vm;
 
     map<string,variant<FileSystem*,File>> succs;
@@ -52,12 +58,16 @@ class FileSystem
     FileSystem() 
       : vm (nullopt)
       , succs ({})
-      {};
+      {
+        path.push_back("");
+      };
 
-    FileSystem(optional<versionManager> vm, FileSystem* parent)
+    FileSystem(optional<versionManager> vm, FileSystem* parent, string nextPath)
       : vm (vm)
       {
         succs[".."] = parent;
+        path = parent->path;
+        path.push_back(nextPath);
       };
     
 
@@ -81,6 +91,6 @@ class FileSystem
       return ir("..");
     };
 
-    string toString(int tabs = 1, bool withContent = false, bool showDotDot = false);
+    string toString(bool withContent = false, bool showDotDot = false, int tabs = 1);
 
 };
