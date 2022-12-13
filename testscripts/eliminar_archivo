@@ -1,0 +1,7 @@
+crear_archivo(archivo1)
+// deberia imprimir raiz + archivo1
+print()
+eliminar(archivo1)
+// deberia imprimir solo la raiz
+print()
+salir

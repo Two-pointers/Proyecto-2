@@ -1,0 +1,7 @@
+crear_dir(dir1)
+ir(dir1)
+// deberia dar error
+crear_dir(..)
+// solo imprime la raiz
+print()
+salir

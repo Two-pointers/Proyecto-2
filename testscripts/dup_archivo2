@@ -1,0 +1,6 @@
+crear_dir(dir1)
+// deberia imprimir error de duplicacion
+crear_archivo(dir1)
+// arbol con raiz + dir1
+print()
+salir

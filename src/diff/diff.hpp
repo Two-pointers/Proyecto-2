@@ -7,3 +7,4 @@
 
 using namespace std;
 
+string myers(string v1, string v2);
