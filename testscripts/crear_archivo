@@ -1,0 +1,4 @@
+crear_archivo(archivo1)
+// deberia imprimir la raiz + archivo1
+print()
+salir

@@ -19,7 +19,7 @@ string FileSystem::typeOf(variant<FileSystem*,File> t){
 
 variant<Error,monostate> FileSystem::_crear_dir(string nombre){
   if (objectExists(nombre)) return Error("El " + typeOf(succs[nombre]) + ": '" + nombre + "' ya existe");
-
+  if (nombre=="..") return Error("Nombre: '..' reservado para directorios padres");
 
   FileSystem* s = new FileSystem{nullopt,this};
   succs[nombre] = s;
@@ -29,12 +29,14 @@ variant<Error,monostate> FileSystem::_crear_dir(string nombre){
 
 variant<Error,monostate> FileSystem::_crear_archivo(string nombre){
   if (objectExists(nombre)) return Error("El " + typeOf(succs[nombre]) + ": '" + nombre + "' ya existe");
+  if (nombre=="..") return Error("Nombre: '..' reservado para directorios padres");
   succs[nombre] = "";
   return {};
 }
 
 variant<Error,monostate> FileSystem::_eliminar(string nombre){
   if (!objectExists(nombre)) return Error("'" + nombre + "' NO existe");
+  if (nombre=="..") return Error("NO se puede eliminar '..'");
 
   succs.erase(nombre);
   return {};

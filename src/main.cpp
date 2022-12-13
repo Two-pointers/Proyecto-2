@@ -2,9 +2,11 @@
 #include "versionManager/versionManager.hpp"
 #include "repl/graph.hpp"
 #include "repl/repl.hpp"
+#include <fstream>
 using namespace std;
 
 int main(){
+
   /*
 	versionManager vm = createVM();
 
@@ -25,7 +27,7 @@ int main(){
 		cout << "LCA entre "<< v << " "<< u << endl;
 		cout << lcaVersions(vm, v,u) << endl;
 	}
-	*/
+	
 
 	FileSystem root;
 
@@ -46,13 +48,48 @@ int main(){
 	dir2->escribir("archivo3","bbbb");
 
 	cout << "root: " << endl;
-	cout << root.toString() << endl;
+	cout << root.toString(1,true,false) << endl;
 	cout << "================" << endl;
 	cout << dir2->toString() << endl;
+	*/
 
-	REPL repl;
+	string testFolder = "./testscripts";
+	string testFiles[] {
+		"crear_dir",
+		"crear_archivo",
+		"llenar_archivo",
+		"eliminar_dir",
+		"eliminar_archivo",
+		"ir",
+		"ir_y_volver",
+		"dup_dir1",
+		"dup_dir2",
+		"dup_archivo1",
+		"dup_archivo2",
+		"cannot_mkdir_dotdot_root",
+		"cannot_mkdir_dotdot",
+		"cannot_mkfile_dotdot_root",
+		"cannot_mkfile_dotdot",
+		"cannot_delete_dotdot_root",
+		"cannot_delete_dotdot",
+		"cannot_delete_inexistent",
+		"cannot_read_inexistent",
+		"cannot_ir_inexistent",
+		"cannot_ir_solo_root",
+	};
 
-	repl.test();
+	for (auto tfile : testFiles){
+		cout << "================" << endl;
+		cout << "Test: " << tfile << endl;
+		cout << "================" << endl;
+		string fp = testFolder + "/" + tfile;
+		ifstream ifFile(fp,ifstream::in);
+		REPL().runREPL(ifFile);
+	}
+
+	
+
+	
 
 	return 0;
 

@@ -1,0 +1,8 @@
+crear_dir(dir1)
+crear_archivo(archivo1)
+ir(dir1)
+crear_dir(dir2)
+crear_archivo(archivo2)
+// deberia imprimir solo dir2 + archivo2
+print()
+salir
