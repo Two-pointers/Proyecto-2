@@ -1,6 +1,16 @@
 {
   "files.associations": {
     "iostream": "cpp",
-    "typeinfo": "cpp"
+    "typeinfo": "cpp",
+    "*.tcc": "cpp",
+    "regex": "cpp",
+    "string": "cpp",
+    "ostream": "cpp",
+    "crear_dir": "cpp",
+    "variant": "cpp",
+    "optional": "cpp",
+    "crear_archivo_celv": "cpp",
+    "eliminar_archivo_celv": "cpp",
+    "ir_y_volver_celv": "cpp"
   }
 }

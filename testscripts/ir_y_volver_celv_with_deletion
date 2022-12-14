@@ -1,0 +1,14 @@
+celv_iniciar()
+crear_dir(dir1)
+crear_archivo(archivo1)
+ir(dir1)
+crear_dir(dir2)
+crear_archivo(archivo2)
+eliminar(archivo2)
+ir()
+eliminar(dir1)
+// deberia imprimir creacion de los 4 cosos, y 
+// la eliminacion de los 2
+celv_historia()
+print()
+salir

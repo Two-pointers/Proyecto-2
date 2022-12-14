@@ -6,12 +6,17 @@
 #include <utility>
 #include <optional>
 #include <variant>
+#include <iostream>
+#include <sstream>
 #include "../versionManager/versionManager.hpp"
+#include "../versionManager/fileSystemVM.hpp"
 #include "../utils/coloring/coloring.hpp"
 
 using namespace std;
 
 using File = string;
+
+string concatPaths(vector<string> paths);
 
 struct Error{
   string description;
@@ -46,9 +51,20 @@ class FileSystem
     variant<Error,FileSystem*> _ir(){
       return _ir("..");
     };
+
+    FileSystem* createObject(vector<string> traversal,variant<string,tupleFile> object);
   
+    bool childrenHaveVM();
+
+    bool canStartVM(){
+      return !childrenHaveVM() && holds_alternative<Error>(getLowestAncesterWithVM());
+    };
+
+    variant<Error,pair<FileSystem*,vector<string>>> getLowestAncesterWithVM();
   public:
 
+    // should be something like: ["","dir","subdir"]
+    // meaning /dir/subdir
     vector<string> path;
 
     optional<versionManager> vm;
@@ -71,6 +87,10 @@ class FileSystem
       };
     
 
+    string getFolderName(){
+      return path[path.size()-1];
+    }
+
     string typeOf(variant<FileSystem*,File> t);
 
     bool objectExists(string name);
@@ -91,6 +111,19 @@ class FileSystem
       return ir("..");
     };
 
+    variant<Error,monostate> celv_iniciar();
+    variant<Error,string> celv_historia();
+
     string toString(bool withContent = false, bool showDotDot = false, int tabs = 1);
+
+    variant<Error,FileSystem*> celv_vamos(int version);
+
+    variant<Error,FileSystem*> celv_fusion(int version1, int version2);
+
+    bool isRoot();
+
+
+
+    
 
 };

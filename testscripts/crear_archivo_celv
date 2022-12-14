@@ -1,0 +1,6 @@
+celv_iniciar()
+crear_archivo(archivo1)
+// // deberia imprimir el archivo1 en la historia
+celv_historia()
+print()
+salir

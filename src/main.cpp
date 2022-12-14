@@ -1,43 +1,53 @@
 #include <iostream>
 #include "versionManager/versionManager.hpp"
-
+#include "repl/graph.hpp"
+#include "repl/repl.hpp"
+#include <fstream>
 using namespace std;
 
 int main(){
-  
-	versionManager vm = createVM();
-	fileSystemVM fs;
+	string testFolder = "./testscripts";
+	string testFiles[] {
+		"crear_dir",
+		"crear_archivo",
+		"llenar_archivo",
+		"eliminar_dir",
+		"eliminar_archivo",
+		"ir",
+		"ir_y_volver",
+		"dup_dir1",
+		"dup_dir2",
+		"dup_archivo1",
+		"dup_archivo2",
+		"cannot_mkdir_dotdot_root",
+		"cannot_mkdir_dotdot",
+		"cannot_mkfile_dotdot_root",
+		"cannot_mkfile_dotdot",
+		"cannot_delete_dotdot_root",
+		"cannot_delete_dotdot",
+		"cannot_delete_inexistent",
+		"cannot_read_inexistent",
+		"cannot_ir_inexistent",
+		"cannot_ir_solo_root",
+		"help",
+		"root_celv_init",
+		"root_celv",
+		"crear_archivo_celv",
+		"eliminar_dir_celv",
+		"eliminar_archivo_celv",
+		"ir_celv",
+		"ir_celv_with_deletion",
+		"ir_y_volver_celv",
+		"ir_y_volver_celv_with_deletion",
+	};
 
-	int val = createInVM(file,"src/main",vm);
-	val = createInVM(file,"src/f1",vm);
-	val = createInVM(file,"src/f20",vm);
-	fs = changeVersion( vm, 0 );
-	val = createInVM(file,"src/f3",vm);
-	val = createInVM(file,"src/f4",vm);
-	val = createInVM(file,"src/f5",vm);
-	fs = changeVersion( vm, 1 );
-	val = createInVM(file,"src/f1",vm);
-	val = createInVM(file,"src/f2",vm);
-	val = createInVM(file,"src/f3",vm);
-
-	val = editInVM("src/f1","c1",vm);
-	val = editInVM("src/main","c2",vm);
-	val = editInVM("src/f2","c3",vm);
-	val = deleteInVM(file,"src/f3",vm);
-
-	// FOR(i,0,100){
-	// 	int v, u; cin>>v>>u;
-	// 	cout << "LCA entre "<< v << " "<< u << endl;
-	// 	cout << lcaVersions(vm, v,u) << endl;
-	// }
-
-	val = mergeVersions(vm,3,12);
-
-	cout << "\n\n\nVersiones "<< vm.versions << endl;
-	fs = getFilesVM(vm,vm.versions);
-	cout << fileSystemToString(fs) << "\n";
-
-
+	for (auto tfile : testFiles){
+		cout << "================" << endl;
+		cout << "Test: " << tfile << endl;
+		cout << "================" << endl;
+		string fp = testFolder + "/" + tfile;
+		ifstream ifFile(fp,ifstream::in);
+		REPL().runREPL(ifFile);
+	}
 	return 0;
-
 }

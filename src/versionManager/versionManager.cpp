@@ -213,3 +213,42 @@ int mergeVersions( versionManager &vm, int v1, int v2 ){
 
 	return 0;
 }
+
+string operation::toString(){
+	string result;
+	result += "Version: " + to_string(parent_version) + "\n";
+	result += "Operacion realizada: ";
+	switch (opType)
+	{
+	case operationType::crea:
+		result += "\u001b[92mCREAR ";
+		break;
+	
+	case operationType::dele:
+		result += "\u001b[91mELIMINAR ";
+		break;
+	
+	default:
+		result += "\u001b[95mEDITAR ";
+		break;
+	}
+
+	switch (opObj)
+	{
+	case operationObj::file:
+		result += "ARCHIVO";
+		break;
+	
+	default:
+		result += "DIRECTORIO";
+		break;
+	}
+
+	result += "\u001b[0m\n";
+	result += "Argumentos: " + path + ", " + content + "\n";
+	result += "Version anterior: " + to_string(parent_version) + "\n";
+
+	return result;
+
+
+}

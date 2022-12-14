@@ -25,6 +25,8 @@ struct operation{
 	operationObj opObj;
 	string path;
 	string content;
+
+	string toString();
 };
 
 struct versionManager{

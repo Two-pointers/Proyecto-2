@@ -37,3 +37,4 @@ sudokuAsSat
 *.vscode*
 main
 /tests/bin/*
+main

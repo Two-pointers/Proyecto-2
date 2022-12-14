@@ -1,44 +1,63 @@
 #include "graph.hpp"
 
 variant<Error,monostate> FileSystem::crear_dir(string nombre){
-  if (!vm.has_value()) return _crear_dir(nombre);
-
-  // fill implementation with version manager
-  return {};
+  
+  variant<Error,monostate> v = _crear_dir(nombre);
+  bool b = canStartVM();
+  if (b || holds_alternative<Error>(v)) return v;
+  auto p = getLowestAncesterWithVM();
+  if (holds_alternative<Error>(p)){
+    cout << get<Error>(p).toString() << endl;
+  }
+    
+  auto [fs,path] = get<pair<FileSystem*,vector<string>>>(p);
+  string pathstr = concatPaths(path) + nombre;
+  cout << "pathstr: " << pathstr << endl;
+  createInVM(operationObj::folder,pathstr,fs->vm.value());
+  
+  return monostate{};
 }
 
 
 variant<Error,monostate> FileSystem::crear_archivo(string nombre){
-  if (!vm.has_value()) return _crear_archivo(nombre);
-  // fill implementation with version manager
-  return {};
+  variant<Error,monostate> v = _crear_archivo(nombre);
+  if (canStartVM() || holds_alternative<Error>(v)) return v;
+
+  auto [fs,path] = get<pair<FileSystem*,vector<string>>>(getLowestAncesterWithVM());
+
+  createInVM(operationObj::file,concatPaths(path) + nombre,fs->vm.value());
+
+  return monostate{};
 }
 
 variant<Error,monostate> FileSystem::eliminar(string nombre){
-  if (!vm.has_value()) return _eliminar(nombre);
+  variant<Error,monostate> v = _eliminar(nombre);
+  if (canStartVM() || holds_alternative<Error>(v)) return v;
 
-  // fill implementation with version manager
-  return {};
-  return {};
+  auto [fs,path] = get<pair<FileSystem*,vector<string>>>(getLowestAncesterWithVM());
+
+  int i = deleteInVM(operationObj::folder,concatPaths(path) + nombre,fs->vm.value());
+  if (i == 1)
+    deleteInVM(operationObj::file,concatPaths(path) + nombre,fs->vm.value());
+
+  return monostate{};
 }
 
 variant<Error,string> FileSystem::leer(string nombre){
-  if (!vm.has_value()) return _leer(nombre);
-
-  // fill implementation with version manager
-  return {};
+  return _leer(nombre);
 }
 
 variant<Error,monostate> FileSystem::escribir(string nombre, string contenido){
-  if (!vm.has_value()) return _escribir(nombre, contenido);
+  variant<Error,monostate> v = _escribir(nombre,contenido);
+  if (canStartVM() || holds_alternative<Error>(v)) return v;
 
-  // fill implementation with version manager
-  return {};
+  auto [fs,path] = get<pair<FileSystem*,vector<string>>>(getLowestAncesterWithVM());
+
+  editInVM(concatPaths(path) + nombre,contenido,fs->vm.value());
+
+  return monostate{};
 }
 
 variant<Error,FileSystem*> FileSystem::ir(string nombre){
-  if (!vm.has_value()) return _ir(nombre);
-
-  // fill implementation with version manager
-  return {};
+  return _ir(nombre);
 }

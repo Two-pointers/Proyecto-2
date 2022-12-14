@@ -115,8 +115,8 @@ struct REPL
   }
 
   bool ir1(string line){
-    regex crearDirRegex{oneArgumentBuilder("ir")};
-    if (!regex_match(line,crearDirRegex)) return false;
+    regex irRegex{oneArgumentBuilder("ir")};
+    if (!regex_match(line,irRegex)) return false;
 
     regex_search(line,m,firstArgumentRegex);
     
@@ -143,7 +143,75 @@ struct REPL
     } else{
       current = get<FileSystem*>(merror);
     }
+  }
 
+  bool celv_iniciar(string line){
+    regex iniciarRegex{"\\s*celv_iniciar\\s*\\(\\s*\\)\\s*"};
+    if (!regex_match(line,iniciarRegex)) return false;
+
+    variant<Error, monostate> merror = current->celv_iniciar();
+
+    if (holds_alternative<Error>(merror)){
+      cout << get<Error>(merror).toString() << endl;
+    } 
+    return true;
+  }
+
+  bool celv_historia(string line){
+    regex historiaRegex{"\\s*celv_historia\\s*\\(\\s*\\)\\s*"};
+    if (!regex_match(line,historiaRegex)) return false;
+
+    variant<Error, string> merror = current->celv_historia();
+
+    if (holds_alternative<Error>(merror)){
+      cout << get<Error>(merror).toString() << endl;
+    } else {
+      cout << get<string>(merror) << endl;
+    }
+    return true;
+  }
+
+  bool celv_vamos(string line){
+    regex vamosRegex{oneArgumentBuilder("celv_vamos")};
+    if (!regex_match(line,vamosRegex)) return false;
+
+    regex_search(line,m,firstArgumentRegex);
+    
+    string match = m.str();
+    match.erase(match.begin());
+    variant<Error, FileSystem*> merror = current->celv_vamos(stoi(match));
+
+    if (holds_alternative<Error>(merror)){
+      cout << get<Error>(merror).toString() << endl;
+    } else{
+      current = get<FileSystem*>(merror);
+    }
+    return true;
+  }
+
+  bool celv_fusion(string line){
+    smatch m2;
+    regex celv_fusionRegex{twoArgumentsBuilder("celv_fusion")};
+    if (!regex_match(line,celv_fusionRegex)) return false;
+
+    regex_search(line,m,firstArgumentRegex);
+    regex_search(line,m2,secondArgumentRegex);
+
+    string f1 = m.str();
+    f1.erase(f1.begin());
+
+    string f2 = m2.str();
+    f2.erase(f2.begin());
+    variant<Error, FileSystem*> merror = current->celv_fusion(stoi(f1),stoi(f2));
+
+    if (holds_alternative<Error>(merror)){
+      cout << get<Error>(merror).toString() << endl;
+    } else{
+      current = get<FileSystem*>(merror); 
+    }
+      
+    
+    return true;
   }
 
   bool comment(string line){
@@ -213,6 +281,10 @@ struct REPL
       if (!b) b = ir0(line);
       if (!b) b = print(line);
       if (!b) b = ayuda(line);
+      if (!b) b = celv_iniciar(line);
+      if (!b) b = celv_historia(line);
+      if (!b) b = celv_vamos(line);
+      if (!b) b = celv_fusion(line);
       if (!b) b = comment(line);
       if (line == "salir") return;
       if (!b) (cout << "Bad function: " << line << endl);

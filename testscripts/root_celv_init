@@ -1,0 +1,5 @@
+celv_iniciar()
+// deberia imprimir o historia vacia o  historia con un archivo creado?
+celv_historia()
+print()
+salir
