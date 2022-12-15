@@ -49,10 +49,11 @@ vector<variant<string,pair<File,string>>> FileSystem::getObjects(string path){
   {
     if (name == "..") continue;
     if (holds_alternative<File>(value)){
-      res.push_back(make_pair(name,path + get<File>(value)));
+      res.push_back(make_pair(path + name,get<File>(value)));
       continue;
     }
     fs = get<FileSystem*>(value);
+    res.push_back(path + name);
     for(auto r : (fs->getObjects(path + name + "/")))
       res.push_back(r);
   }

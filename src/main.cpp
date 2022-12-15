@@ -51,6 +51,7 @@ int main(){
 		"llenar_archivo_celv",
 		"celv_jump_with_edition",
 		"celv_deletion",
+		"celv_with_existing_tree",
 	};
 
 	vector<string> nonRootCELVTests{
@@ -81,6 +82,7 @@ int main(){
 
 	case TestMode::ROOTCELV:
 		testsToRun = rootCELVTests;
+		break;
 	
 	case TestMode::NONROOTCELV:
 		testsToRun = nonRootCELVTests;
