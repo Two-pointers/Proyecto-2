@@ -99,9 +99,9 @@ variant<Error,FileSystem*> FileSystem::celv_fusion(int version1, int version2){
   FileSystem* fs = pfs.first;
   vector<string> path = pfs.second;
 
-  int err = mergeVersions(fs->vm.value(),version1,version2);
+  variant<Error,monostate> err = mergeVersions(fs->vm.value(),version1,version2);
 
-  if (err == -1) return Error("Versiones invalidas");
+  if (holds_alternative<Error>(err)) return get<Error>(err);
 
   // go down the tree, trying to recover the last
   // dir.

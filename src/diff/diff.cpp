@@ -120,10 +120,21 @@ string groupedSolToString(vector<pair<Action,string>> groupedSol){
 }
 
 
-string myers(string v1, string v2){
+variant<Error,string> myers(string v1, string v2){
   vector<pair<Action,char>> sol          = diffMyers(v1,v2);
   vector<pair<Action,string>> groupedSol = group(sol);
   string stringSol = groupedSolToString(groupedSol);
+  for(auto [a,_] : sol)
+  {
+    switch (a)
+    {
+    case Action::NOTHING:
+      break;
+    
+    default:
+      return Error(stringSol);
+    }
+  }
   return stringSol;
 }
 

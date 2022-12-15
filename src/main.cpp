@@ -52,6 +52,8 @@ int main(){
 		"celv_jump_with_edition",
 		"celv_deletion",
 		"celv_with_existing_tree",
+		"celv_conflict",
+		"celv_fusion_success",
 	};
 
 	vector<string> nonRootCELVTests{
@@ -69,6 +71,7 @@ int main(){
 		"llenar_archivo_celv_nr",
 		"celv_jump_with_edition_nr",
 		"celv_deletion_nr",
+		"celv_with_existing_tree_nr",
 	};
 
 

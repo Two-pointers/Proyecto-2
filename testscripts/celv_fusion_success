@@ -1,0 +1,9 @@
+celv_iniciar()
+crear_archivo(a1)
+escribir(a1,ABCABBA)
+crear_archivo(a2)
+crear_dir(dir1)
+escribir(a2,CBABAC)
+celv_fusion(2,3)
+print()
+salir

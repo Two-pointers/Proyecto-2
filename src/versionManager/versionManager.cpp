@@ -147,9 +147,11 @@ fileSystemVM getFilesVM( versionManager vm, int version  ){
 }
 
 // return -1 if the versions aren't valid
-int mergeVersions( versionManager &vm, int v1, int v2 ){
-	if( !validVersion(vm,v1) ) return -1;
-	if( !validVersion(vm,v2) ) return -1;
+variant<Error,monostate> mergeVersions( versionManager &vm, int v1, int v2 ){
+	if( !validVersion(vm,v1) ) return Error("Version: '" + to_string(v1) + "' no valida");
+	if( !validVersion(vm,v2) ) return Error("Version: '" + to_string(v2) + "' no valida");
+
+	variant<Error,monostate> merror = monostate{};
 
 	// the version 1 will be our base version
 	// where we will add/edit new files
@@ -183,7 +185,16 @@ int mergeVersions( versionManager &vm, int v1, int v2 ){
 			if( lcaConflic==lca ){
 				// both version have modify the same file
 				// both can be the same
-				editInVM(path,"CONFLICT",vm);
+				variant<Error,string> mconflictFusion = myers(tfv1.content,tfv2.content);
+				if (holds_alternative<Error>(mconflictFusion)){
+					merror = Error("Conflicto fusionando V-" + to_string(v1) 
+					+ " y V-" + to_string(v2) + "\n" + 
+					"archivos: '" + tfv1.name + "' y '" + tfv2.name + "'\n" +
+					"diff log\n" + get<Error>(mconflictFusion).description);
+				}
+				//editInVM(path,conflictFusion,vm);
+				
+
 			}else{
 				// this file was edit in 1 version
 				if( tfv1.version>tfv2.version ){
@@ -211,7 +222,7 @@ int mergeVersions( versionManager &vm, int v1, int v2 ){
 		}
 	}
 
-	return 0;
+	return merror;
 }
 
 string operation::toString(){

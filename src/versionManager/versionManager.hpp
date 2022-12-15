@@ -6,7 +6,9 @@
 #include <algorithm>
 #include <map>
 #include "fileSystemVM.hpp"
-
+#include <variant>
+#include "../utils/types/error.hpp"
+#include "../diff/diff.hpp"
 using namespace std;
 
 typedef long long ll;
@@ -51,4 +53,4 @@ int editInVM( string path, string content, versionManager &vm );
 fileSystemVM changeVersion( versionManager &vm, int newVersion );
 int lcaVersions( versionManager vm, int v1, int v2 );
 fileSystemVM getFilesVM( versionManager vm, int version  );
-int mergeVersions( versionManager &vm, int v1, int v2 );
+variant<Error,monostate> mergeVersions( versionManager &vm, int v1, int v2 );

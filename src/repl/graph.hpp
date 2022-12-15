@@ -10,7 +10,8 @@
 #include <sstream>
 #include "../versionManager/versionManager.hpp"
 #include "../versionManager/fileSystemVM.hpp"
-#include "../utils/coloring/coloring.hpp"
+
+#include "../utils/types/error.hpp"
 
 using namespace std;
 
@@ -18,19 +19,7 @@ using File = string;
 
 string concatPaths(vector<string> paths);
 
-struct Error{
-  string description;
 
-  Error()
-    : description ("")
-    {};
-  
-  Error (string description)
-    : description (description)
-    {};
-  
-  string toString();
-};
 
 class FileSystem
 {

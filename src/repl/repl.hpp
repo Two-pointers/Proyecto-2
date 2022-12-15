@@ -252,7 +252,11 @@ struct REPL
     cout << "escribir(file,content) - llena el archivo hijo" << endl;
     cout << "ir(file)               - ir al directorio hijo" << endl;
     cout << "ir()                   - ir al directorio padre" << endl;
-
+    cout << "celv_iniciar()         - crear un versionador" << endl;
+    cout << "celv_iniciar()         - crear un versionador" << endl;   
+    cout << "celv_historia()        - imprime el historial del versionador" << endl;
+    cout << "celv_vamos(version)    - cambia la version del versionador" << endl;
+    cout << "celv_fusion(v1,v2)     - intenta fusionar ambas versiones" << endl;
     return true;
 
   }

@@ -11,6 +11,10 @@
     "optional": "cpp",
     "crear_archivo_celv": "cpp",
     "eliminar_archivo_celv": "cpp",
-    "ir_y_volver_celv": "cpp"
+    "ir_y_volver_celv": "cpp",
+    "celv_jump_backwards_then_forwards": "cpp",
+    "llenar_archivo_celv": "cpp",
+    "celv_jump_with_edition": "cpp",
+    "eliminar_archivo_celv_nr": "cpp"
   }
 }

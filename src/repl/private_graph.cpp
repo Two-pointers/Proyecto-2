@@ -1,11 +1,6 @@
 #include "graph.hpp"
 
 
-string Error::toString(){
-  string errString = "[ERROR] " + this->description;
-  return colorRED(errString);
-}
-
 FileSystem generateRoot(){
   FileSystem fs;
   return fs; 
