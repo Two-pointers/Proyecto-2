@@ -1,0 +1,10 @@
+crear_dir(dir1)
+ir(dir1)
+celv_iniciar()
+crear_archivo(archivo1)
+escribir(archivo1,asdf)
+// deberia imprimir el cambio
+celv_historia()
+// deberia imprimir raiz + archivo1
+print()
+salir

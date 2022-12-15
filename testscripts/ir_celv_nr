@@ -1,0 +1,13 @@
+crear_dir(dir1)
+ir(dir1)
+celv_iniciar()
+crear_dir(dir1)
+crear_archivo(archivo1)
+ir(dir1)
+crear_dir(dir2)
+crear_archivo(archivo2)
+// deberia aparecer la creacion de dir1, archivo1, dir2 y archivo2
+celv_historia()
+// deberia imprimir solo dir2 + archivo2
+print()
+salir

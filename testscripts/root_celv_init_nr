@@ -1,0 +1,7 @@
+crear_dir(dir1)
+ir(dir1)
+celv_iniciar()
+// deberia imprimir o historia vacia o  historia con un archivo creado?
+celv_historia()
+print()
+salir

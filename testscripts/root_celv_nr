@@ -1,0 +1,9 @@
+crear_dir(dir1)
+ir(dir1)
+celv_iniciar()
+celv_historia()
+crear_dir(dir1)
+// deberia imprimir el dir1 en la historia
+celv_historia()
+print()
+salir

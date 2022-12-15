@@ -52,7 +52,9 @@ class FileSystem
       return _ir("..");
     };
 
-    FileSystem* createObject(vector<string> traversal,variant<string,tupleFile> object);
+    vector<variant<string,pair<File,string>>> getObjects(string path = "/");
+
+    void createObject(vector<string> traversal,variant<string,tupleFile> object);
   
     bool childrenHaveVM();
 
@@ -114,7 +116,7 @@ class FileSystem
     variant<Error,monostate> celv_iniciar();
     variant<Error,string> celv_historia();
 
-    string toString(bool withContent = false, bool showDotDot = false, int tabs = 1);
+    string toString(bool withContent = true, bool showDotDot = false, int tabs = 1);
 
     variant<Error,FileSystem*> celv_vamos(int version);
 

@@ -1,16 +1,25 @@
 #include "graph.hpp"
 
 vector<string> unconcatPaths(string path){
+
   vector<string> result;
-  stringstream ss (path);
   char delim = '/';
   string item;
 
-  while (getline (ss, item, delim)) {
-      result.push_back (item);
+  for(auto c : path)
+  {
+   if (c == delim){
+    result.push_back(item);
+    item = "";
+    continue;
+   } 
+   item.push_back(c);
   }
 
+  if (item != "") result.push_back(item);
+
   return result;
+
 }
 
 // true if node is true
@@ -32,9 +41,39 @@ bool FileSystem::childrenHaveVM(){
 
 }
 
+
+vector<variant<string,pair<File,string>>> FileSystem::getObjects(string path){
+  vector<variant<string,pair<File,string>>> res;
+  FileSystem* fs;
+  for(auto [name,value] : succs)
+  {
+    if (name == "..") continue;
+    if (holds_alternative<File>(value)){
+      res.push_back(make_pair(name,path + get<File>(value)));
+      continue;
+    }
+    fs = get<FileSystem*>(value);
+    for(auto r : (fs->getObjects(path + name + "/")))
+      res.push_back(r);
+  }
+
+  return res;
+}
+
 variant<Error,monostate> FileSystem::celv_iniciar(){
   if (!canStartVM()) return Error("No se puede inicializar CELV, ya existe uno.");
   vm = createVM();
+
+  for (auto elem: getObjects()){
+    if (holds_alternative<string>(elem)){
+      createInVM(operationObj::folder,get<string>(elem),vm.value());
+    } else{
+      auto [name,content] = get<pair<File,string>>(elem);
+      createInVM(operationObj::file,name,vm.value());
+      editInVM(name,content,vm.value());
+    }
+  }
+
   return monostate{};
 }
 
@@ -69,7 +108,7 @@ variant<Error,FileSystem*> FileSystem::celv_fusion(int version1, int version2){
   variant<Error,FileSystem*> next;
   for(auto elem : path)
   {
-    if (elem == "/" || elem == "") continue;
+    if (elem == "/" || elem == "" || elem == " ") continue;
     next = root->ir(elem);
     if (holds_alternative<Error>(next)) return root;
     root = get<FileSystem*>(next);
@@ -106,15 +145,17 @@ variant<Error,pair<FileSystem*,vector<string>>> FileSystem::getLowestAncesterWit
 }
 
 // assumes that object only contains the name, not the entire path.
-FileSystem* FileSystem::createObject(vector<string> traversal,variant<string,tupleFile> object){
+void FileSystem::createObject(vector<string> traversal,variant<string,tupleFile> object){
+
   if (traversal.empty()){
     if (holds_alternative<string>(object)){
       _crear_dir(get<string>(object));
     } else{
       tupleFile f = get<tupleFile>(object);
       _crear_archivo(f.name);
-      _escribir(f.name,f.content);
+      get<monostate>(_escribir(f.name,f.content));
     }
+    return;
   }
 
   string next = traversal[0];
@@ -124,6 +165,7 @@ FileSystem* FileSystem::createObject(vector<string> traversal,variant<string,tup
 
   traversal.erase(traversal.begin());
   get<FileSystem*>(ir(next))->createObject(traversal,object);
+  return ;
 }
 
 // flush everything, and rebuild the tree from the lowest node that has a VM.
@@ -141,12 +183,12 @@ variant<Error,FileSystem*> FileSystem::celv_vamos(int version){
   // if there are none, return an error
   if (holds_alternative<Error>(mfs)){
     return get<Error>(mfs);
-  } else{
-    // else, get the file system and the path.
-    auto [_fs,_currentPath] = get<pair<FileSystem*,vector<string>>>(mfs);
-    fs = _fs;
-    currentPath = _currentPath;
-  }
+  } 
+  // else, get the file system and the path.
+  auto [_fs,_currentPath] = get<pair<FileSystem*,vector<string>>>(mfs);
+  fs = _fs;
+  currentPath = _currentPath;
+  
 
   // before clearing the content of the node
   // that has the VM we must preserve its parent
@@ -168,6 +210,8 @@ variant<Error,FileSystem*> FileSystem::celv_vamos(int version){
   vector<string> paths;
   string folder;
   string file;
+
+  
   // for each folder in the VM
   for(auto folder : newFS.folders)
   {
@@ -175,36 +219,37 @@ variant<Error,FileSystem*> FileSystem::celv_vamos(int version){
     paths = unconcatPaths(folder);
     if (paths[0] == "/" || paths[0] == "")
       paths.erase(paths.begin());
-    
     // get the folder that needs to be created and pop it
     folder = paths[paths.size() - 1];
     paths.pop_back();
     // create the object!
-    createObject(paths,folder);
+    fs->createObject(paths,folder);    
   }
-
+  
   for(auto [path,tf] : newFS.files)
   {
+    
     // get the paths and delete the "root"
     paths = unconcatPaths(path);
     if (paths[0] == "/" || paths[0] == "")
       paths.erase(paths.begin());
 
     // get the file that needs to be created and pop it
-    file = paths[paths.size() - 1];
+    tf.name = paths[paths.size() - 1];
     paths.pop_back();
-    tf.name = file;
     // create the object!
-    createObject(paths,tf);
+    fs->createObject(paths,tf);
   }
 
+  
   // go down the tree, trying to recover the last
   // dir.
   FileSystem* root = fs;
   variant<Error,FileSystem*> next;
+  
   for(auto elem : currentPath)
   {
-    if (elem == "/" || elem == "") continue;
+    if (elem == "/" || elem == "" || elem == " ") continue;
     next = root->ir(elem);
     if (holds_alternative<Error>(next)) return root;
     root = get<FileSystem*>(next);

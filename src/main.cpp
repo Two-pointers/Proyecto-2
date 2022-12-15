@@ -3,11 +3,14 @@
 #include "repl/graph.hpp"
 #include "repl/repl.hpp"
 #include <fstream>
+#include <vector>
 using namespace std;
+
+enum class TestMode { TREE, ROOTCELV, NONROOTCELV };
 
 int main(){
 	string testFolder = "./testscripts";
-	string testFiles[] {
+	vector<string> treeTests {
 		"crear_dir",
 		"crear_archivo",
 		"llenar_archivo",
@@ -30,6 +33,10 @@ int main(){
 		"cannot_ir_inexistent",
 		"cannot_ir_solo_root",
 		"help",
+		
+	};
+
+	vector<string> rootCELVTests{
 		"root_celv_init",
 		"root_celv",
 		"crear_archivo_celv",
@@ -39,9 +46,50 @@ int main(){
 		"ir_celv_with_deletion",
 		"ir_y_volver_celv",
 		"ir_y_volver_celv_with_deletion",
+		"celv_jump_backwards",
+		"celv_jump_backwards_then_forwards",
+		"llenar_archivo_celv",
+		"celv_jump_with_edition",
+		"celv_deletion",
 	};
 
-	for (auto tfile : testFiles){
+	vector<string> nonRootCELVTests{
+		"root_celv_init_nr",
+		"root_celv_nr",
+		"crear_archivo_celv_nr",
+		"eliminar_dir_celv_nr",
+		"eliminar_archivo_celv_nr",
+		"ir_celv_nr",
+		"ir_celv_with_deletion_nr",
+		"ir_y_volver_celv_nr",
+		"ir_y_volver_celv_with_deletion_nr",
+		"celv_jump_backwards_nr",
+		"celv_jump_backwards_then_forwards_nr",
+		"llenar_archivo_celv_nr",
+		"celv_jump_with_edition_nr",
+		"celv_deletion_nr",
+	};
+
+
+	TestMode mode = TestMode::ROOTCELV;
+	vector<string> testsToRun;
+	switch (mode)
+	{
+	case TestMode::TREE:
+		testsToRun = treeTests;
+		break;
+
+	case TestMode::ROOTCELV:
+		testsToRun = rootCELVTests;
+	
+	case TestMode::NONROOTCELV:
+		testsToRun = nonRootCELVTests;
+
+	default:
+		break;
+	}
+
+	for (auto tfile : testsToRun){
 		cout << "================" << endl;
 		cout << "Test: " << tfile << endl;
 		cout << "================" << endl;
@@ -49,5 +97,6 @@ int main(){
 		ifstream ifFile(fp,ifstream::in);
 		REPL().runREPL(ifFile);
 	}
+
 	return 0;
 }

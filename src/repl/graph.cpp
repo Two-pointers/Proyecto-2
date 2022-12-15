@@ -12,7 +12,6 @@ variant<Error,monostate> FileSystem::crear_dir(string nombre){
     
   auto [fs,path] = get<pair<FileSystem*,vector<string>>>(p);
   string pathstr = concatPaths(path) + nombre;
-  cout << "pathstr: " << pathstr << endl;
   createInVM(operationObj::folder,pathstr,fs->vm.value());
   
   return monostate{};

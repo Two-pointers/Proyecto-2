@@ -1,0 +1,11 @@
+crear_dir(dir1)
+ir(dir1)
+celv_iniciar()
+crear_dir(dir1)
+print()
+eliminar(dir1)
+// deberia aparecer la creacion de dir + la eliminacion
+celv_historia()
+// deberia imprimir solo la raiz
+print()
+salir

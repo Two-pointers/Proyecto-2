@@ -1,0 +1,18 @@
+crear_dir(dir1)
+ir(dir1)
+celv_iniciar()
+crear_dir(dir1)
+crear_dir(dir2)
+crear_archivo(archivo1)
+escribir(archivo1,ungaunga)
+crear_dir(dir3)
+print()
+celv_historia()
+celv_vamos(2)
+print()
+celv_vamos(4)
+celv_historia()
+// should print everything since we are in version 4!
+print()
+leer(archivo1);
+salir

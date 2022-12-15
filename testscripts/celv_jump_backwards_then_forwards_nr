@@ -1,0 +1,13 @@
+crear_dir(dir1)
+ir(dir1)
+celv_iniciar()
+crear_dir(dir1)
+crear_dir(dir2)
+crear_dir(dir3)
+crear_dir(dir4)
+celv_historia()
+celv_vamos(2)
+celv_vamos(3)
+// deberia imprimir hasta dir3 mas no dir4
+print()
+salir

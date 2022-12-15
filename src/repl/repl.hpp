@@ -257,9 +257,9 @@ struct REPL
 
   }
 
-  void runREPL(istream& c, bool showBanner=false){
+  void runREPL(istream& c, bool testing=true){
 
-    if (showBanner){
+    if (!testing){
       cout << "==========================" << endl;
       cout << "| GLORIOUS CELV REPL     |" << endl;
       cout << "==========================" << endl;
@@ -271,6 +271,7 @@ struct REPL
       string line;
       cout << "> ";
       std::getline(c, line);
+      if (testing) cout << line << endl;
       b = false;
       b = crear_dir(line);
       if (!b) b = crear_archivo(line);
