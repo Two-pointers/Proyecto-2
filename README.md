@@ -1,5 +1,8 @@
 # Proyecto-2
 
+# Como correr
+
+Hacer make! beware que se utiliza `c++20`!
 
 #Implementacion
 
