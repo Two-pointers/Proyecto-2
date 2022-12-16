@@ -54,6 +54,7 @@ int main(){
 		"celv_with_existing_tree",
 		"celv_conflict",
 		"celv_fusion_success",
+		"celv_importar",
 	};
 
 	vector<string> nonRootCELVTests{

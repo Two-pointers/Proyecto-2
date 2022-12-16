@@ -64,3 +64,40 @@ variant<Error,monostate> FileSystem::escribir(string nombre, string contenido){
 variant<Error,FileSystem*> FileSystem::ir(string nombre){
   return _ir(nombre);
 }
+
+
+
+string readFile(filesystem::path path)
+{
+    // Open the stream to 'lock' the file.
+    ifstream f(path, ios::in | ios::binary);
+
+    // Obtain the size of the file.
+    const auto sz = filesystem::file_size(path);
+
+    // Create a buffer.
+    string result(sz, '\0');
+
+    // Read the whole file into the buffer.
+    f.read(result.data(), sz);
+
+    return result;
+}
+
+void FileSystem::celv_importar(string dir, string acc){
+  //filesystem::current_path(filesystem::path{dir});
+  if (acc == "") acc = concatPaths(path);
+  for (auto const& dir_entry : filesystem::directory_iterator(dir))
+    {
+      string name = dir_entry.path().filename();
+      if (filesystem::is_regular_file(dir_entry)){
+        succs[name] = readFile(dir_entry.path());
+        continue;
+      }
+
+      string nextFolder = acc + name + "/";
+      FileSystem* fs = new FileSystem(nullopt,this,nextFolder);
+      fs->celv_importar(dir + name + "/",nextFolder);
+      succs[name] = fs;
+    }
+}

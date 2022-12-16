@@ -214,6 +214,21 @@ struct REPL
     return true;
   }
 
+  bool celv_importar(string line){
+    regex importarRegex{oneArgumentBuilder("celv_importar")};
+    if (!regex_match(line,importarRegex)) return false;
+
+    regex_search(line,m,firstArgumentRegex);
+    
+    string match = m.str();
+    match.erase(match.begin());
+    current->celv_importar(match);
+
+    return true;
+  }
+
+  
+
   bool comment(string line){
     regex comment{"\\s*//"};
     return !regex_match(line,comment);
@@ -257,6 +272,7 @@ struct REPL
     cout << "celv_historia()        - imprime el historial del versionador" << endl;
     cout << "celv_vamos(version)    - cambia la version del versionador" << endl;
     cout << "celv_fusion(v1,v2)     - intenta fusionar ambas versiones" << endl;
+    cout << "celv_importar(dir)     - importa desde el directio. DEBE terminar en '/', i.e: /, /etc/" << endl;
     return true;
 
   }
@@ -290,6 +306,7 @@ struct REPL
       if (!b) b = celv_historia(line);
       if (!b) b = celv_vamos(line);
       if (!b) b = celv_fusion(line);
+      if (!b) b = celv_importar(line);
       if (!b) b = comment(line);
       if (line == "salir") return;
       if (!b) (cout << "Bad function: " << line << endl);

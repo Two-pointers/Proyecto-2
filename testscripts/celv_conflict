@@ -2,12 +2,12 @@ celv_iniciar()
 crear_dir(d1)
 crear_archivo(a1)
 escribir(a1,ABCABBA)
-celv_vamos(1)
+celv_vamos(2)
 escribir(a1,CBABAC)
 eliminar(d1)
 crear_dir(d2)
 // deberia reportar error de fusion
-celv_fusion(2,3)
+celv_fusion(3,4)
 // que deberia imprimir? 
 print()
 salir

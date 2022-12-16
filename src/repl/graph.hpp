@@ -8,17 +8,20 @@
 #include <variant>
 #include <iostream>
 #include <sstream>
+#include <filesystem>
+#include <fstream>
 #include "../versionManager/versionManager.hpp"
 #include "../versionManager/fileSystemVM.hpp"
-
 #include "../utils/types/error.hpp"
 
 using namespace std;
 
 using File = string;
 
-string concatPaths(vector<string> paths);
 
+
+string concatPaths(vector<string> paths);
+string readFile(filesystem::path path);
 
 
 class FileSystem
@@ -110,6 +113,9 @@ class FileSystem
     variant<Error,FileSystem*> celv_vamos(int version);
 
     variant<Error,FileSystem*> celv_fusion(int version1, int version2);
+
+
+    void celv_importar(string dir, string acc="");
 
     bool isRoot();
 
