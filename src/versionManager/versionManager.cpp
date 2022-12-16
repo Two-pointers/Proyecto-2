@@ -227,7 +227,7 @@ variant<Error,monostate> mergeVersions( versionManager &vm, int v1, int v2 ){
 
 string operation::toString(){
 	string result;
-	result += "Version: " + to_string(parent_version) + "\n";
+	result += "Version: " + to_string(new_version) + "\n";
 	result += "Operacion realizada: ";
 	switch (opType)
 	{
