@@ -204,7 +204,8 @@ variant<Error,FileSystem*> FileSystem::celv_vamos(int version){
   versionManager workingVM = fs->vm.value();
   // execute the changeversion and get the new (virtual) FS.
   fileSystemVM newFS = changeVersion(workingVM,version);
-  
+  fs->vm = workingVM;
+
   // check for error in the versions
   if (newFS.folders.empty() && newFS.files.empty()) return Error("Version: '" + to_string(version) + "' does not exists");
 
