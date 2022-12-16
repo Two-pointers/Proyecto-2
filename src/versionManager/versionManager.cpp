@@ -257,7 +257,7 @@ string operation::toString(){
 
 	result += "\u001b[0m\n";
 	result += "Argumentos: " + path + ", " + content + "\n";
-	result += "Version anterior: " + to_string(parent_version) + "\n";
+	result += "Version anterior: " + to_string(parent_version) + "\n\n";
 
 	return result;
 
