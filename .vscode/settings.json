@@ -15,6 +15,7 @@
     "celv_jump_backwards_then_forwards": "cpp",
     "llenar_archivo_celv": "cpp",
     "celv_jump_with_edition": "cpp",
-    "eliminar_archivo_celv_nr": "cpp"
+    "eliminar_archivo_celv_nr": "cpp",
+    "utility": "cpp"
   }
 }

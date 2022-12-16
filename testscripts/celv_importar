@@ -1,3 +1,3 @@
-celv_importar()
+celv_importar(./testo/)
 print()
 salir
