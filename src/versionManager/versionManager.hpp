@@ -23,6 +23,7 @@ enum operationObj { file, folder };
 
 struct operation{
 	int parent_version;
+	int new_version;
 	operationType opType;
 	operationObj opObj;
 	string path;

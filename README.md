@@ -5,6 +5,18 @@
 
 ## VM: Manejador de Versiones
 
+En este proyecto teniamos la necesidad de crear una estructura persistente que nos permita crear, modificar y eliminar archivos, asi como cambiar de version en cualquier momento y fusionar 2 versiones. Para lograr esto decidimos crear un arbol de versiones, donde tras cada posible operacion se creaba un nuevo nodo en el arbol (el nodo puede ser: creacion eliminacion o edicion) de esta manera podremos optimizar la fusion entre versiones.
+
+Representar el problema de esta manera nos permite hacer la fusion de versiones de una manera elegante ya que, al fusionar 2 versiones solo debemos obtener los archivos que se encuentran en cada una y comparar sus nombres para ver si ocurre un conflicto o si el archivo aparece en la nueva version, por ejemplo, si en V1 tenemos 'src/main' y en V2 tenemos 'src/polinomio.cpp' ya que ambos archivos tienen nombres diferentes no tendriamos conflictos. Pero, que pasa si dos archivos tienen el mismo nombre en ambas versiones ? Pues reesulta que si llamamos lca1 al ancentro comun mas ceracano en el arbol de versiones de V1 y V2, y llamamos lca2 al ancestro comun mas cercado entre las dos operaciones de creacion/edicion del archivo, tendremos que si lca1=lca2 entonces ambos archivos no tienen conflictos, podria ocurri que el archivo se creo en una version mucho mas previa a V1 y V2, o que fue modificado por 1 solo de los archivos. Pero, si lca1 != lca2 tenemos un archivo que fue editado en ambas versiones.
+
+Notemos que al hacer la fusion entre versiones de esta manera tenemos una complejidad de $O( n*( log(m) + log(k) ) + m*( log(n) + log(k) ) )$ siendo n la cantidad de archivos en V1, m la cantidad de archivos en V2 y k la cantidad de versiones creadas hasta el momento, los log(n) y log(m) salen ya que usamos sets para saber si un archivo estaba en la version V1 y a la vez en la V2, log(k) ocurre debido a que debemos calcular lca 2 veces.
+
+Para obtener los archivos de una version solo debemos subir hasta la raiz, pero como usamos un set para guardar los nombres de los archivos ya creados (solo guardamos los path), tenemos una complejidad de O(numeroDeOperacionesHechas*log(numeroDeOperaiocnes))
+
+Para crear, eliminar y editar, usamos la misma funcion con diferentes parametros la cual al ser invocada crea los ancestros comunes con el algoritmo de sparse table de la nueva version creada. Esto lo hacemos en $O( log(numeroDeOperaiocnesHechas) )$.
+
+Por ultimo, el historial de versiones lo obtenemos insertando en una lista, asi que para ver todo el historial de operaciones toma O(numeroDeOperacionesHechas)
+
 ## Fuuuuu-sion!
 
 
