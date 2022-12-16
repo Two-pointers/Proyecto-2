@@ -15,7 +15,7 @@ versionManager createVM(){
 int genericOperation( operationType type, operationObj obj, string path, versionManager &vm, string content="" ){	
 	int prevCurrentVersion = vm.currentVersion;
 	vm.depth.push_back( vm.depth[prevCurrentVersion]+1 );
-	vm.history.push_back({vm.currentVersion,type,obj,path,content});
+	vm.history.push_back({vm.currentVersion,vm.versions+1,type,obj,path,content});
 	vm.currentVersion = ++vm.versions;
 
 	int ancestor = prevCurrentVersion, pow2 = 0;
