@@ -1,4 +1,5 @@
 # Proyecto-2
+Manejador de versiones de archivos (como GIT) utilizando algoritmos eficientes
 
 # Como correr
 
